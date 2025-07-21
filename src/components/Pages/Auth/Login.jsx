@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import client from "../../api/client";
 
 import { UserContext } from "../../../contexts/user.context";
 
@@ -12,7 +12,6 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { setCurrentUser } = useContext(UserContext);
-
   const navigate = useNavigate(); //
 
   const handleChange = (e) => {
@@ -29,8 +28,8 @@ const Login = () => {
     setError("");
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/users/login",
+      const response = await client.post(
+        "/users/login",
         {
           email: formData.email,
           password: formData.password,

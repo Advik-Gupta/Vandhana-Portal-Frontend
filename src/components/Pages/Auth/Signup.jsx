@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+import client from "../../api/client";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
@@ -29,13 +29,9 @@ const Signup = () => {
     setError("");
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/users/register",
-        formData,
-        {
-          withCredentials: true, // Include cookies in requests
-        }
-      );
+      const response = await client.post("/users/register", formData, {
+        withCredentials: true, // Include cookies in requests
+      });
       if (response.status === 201) {
         navigate("/login");
       }

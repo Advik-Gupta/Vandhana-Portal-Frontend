@@ -1,6 +1,6 @@
 // src/hooks/useMachineDetails.js
 import { useState, useEffect } from "react";
-import axios from "axios";
+import client from "../api/client";
 
 const useMachineDetails = (id) => {
   const [machine, setMachine] = useState(null);
@@ -14,18 +14,22 @@ const useMachineDetails = (id) => {
       setLoading(true);
       setError("");
       try {
-        const { data } = await axios.get(`http://localhost:8080/api/v1/machines/${id}`);
+        const { data } = await client.get(`machines/${id}`);
         setMachine(data);
 
         const [creatorRes, engineerRes] = await Promise.all([
-          data.createdBy ? axios.get(`http://localhost:8080/api/v1/users/${data.createdBy}`) : Promise.resolve({ data: null }),
-          data.assignedEngineer ? axios.get(`http://localhost:8080/api/v1/users/${data.assignedEngineer}`) : Promise.resolve({ data: null }),
+          data.createdBy
+            ? client.get(`users/${data.createdBy}`)
+            : Promise.resolve({ data: null }),
+          data.assignedEngineer
+            ? client.get(`users/${data.assignedEngineer}`)
+            : Promise.resolve({ data: null }),
         ]);
 
         setCreatedByUser(creatorRes.data);
         setAssignedEngineerUser(engineerRes.data);
       } catch (err) {
-        setError("Failed to fetch machine details.");
+        setError("Failed to fetch machine details.", err);
       } finally {
         setLoading(false);
       }

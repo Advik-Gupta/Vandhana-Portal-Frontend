@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import axios from "axios";
+import client from "../../api/client";
 
 import StatusHeader from "./StatusHeader";
 import ActionButton from "./ActionButton";
@@ -38,8 +38,8 @@ function DataUploadedDetail() {
     )
       .then(async (response) => {
         console.log("Point approved:", response);
-        const notify = await axios.post(
-          `http://localhost:8080/api/v1/notifications/send`,
+        const notify = await client.post(
+          `/notifications/send`,
           {
             message: `Feedback for ${cycleName} cycle of ${machine?.name} - ${testSiteNumber} - ${pointNo} : Data approved`,
             userId: cycleData.uploadBy,
@@ -49,8 +49,8 @@ function DataUploadedDetail() {
             withCredentials: true,
           }
         );
-        const notifyAdmin = await axios.post(
-          `http://localhost:8080/api/v1/notifications/send?to=admin`,
+        const notifyAdmin = await client.post(
+          `/notifications/send?to=admin`,
           {
             message: `Feedback for ${cycleName} cycle of ${machine?.name} - ${testSiteNumber} - ${pointNo} : Data approved BY ${currentUser.role} - ${currentUser.name} (${currentUser._id})`,
           },
@@ -85,8 +85,8 @@ function DataUploadedDetail() {
     )
       .then(async (response) => {
         console.log("Point re-upload requested:", response);
-        const notify = await axios.post(
-          `http://localhost:8080/api/v1/notifications/send`,
+        const notify = await client.post(
+          `/notifications/send`,
           {
             message: `Feedback for ${cycleName} cycle of ${machine?.name} - ${testSiteNumber} - ${pointNo} : ${feedback}`,
             userId: cycleData.uploadBy,
@@ -96,8 +96,8 @@ function DataUploadedDetail() {
             withCredentials: true,
           }
         );
-        const notifyAdmin = await axios.post(
-          `http://localhost:8080/api/v1/notifications/send?to=admin`,
+        const notifyAdmin = await client.post(
+          `/notifications/send?to=admin`,
           {
             message: `Feedback for ${cycleName} cycle of ${machine?.name} - ${testSiteNumber} - ${pointNo} : ${feedback} BY ${currentUser.role} - ${currentUser.name} (${currentUser._id})`,
           },
@@ -106,8 +106,8 @@ function DataUploadedDetail() {
             withCredentials: true,
           }
         );
-        const notifyMachineAndFleetManager = await axios.post(
-          `http://localhost:8080/api/v1/notifications/mailNotification`,
+        const notifyMachineAndFleetManager = await client.post(
+          `/notifications/mailNotification`,
           {
             message: `Supervisor: ${currentUser.name} (${currentUser._id}) has problems with your data for
 ${cycleName} cycle of ${machine?.name} - ${testSiteNumber} - ${pointNo}

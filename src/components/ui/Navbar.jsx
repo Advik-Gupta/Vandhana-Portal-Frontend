@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/user.context";
-import axios from "axios";
+import client from "../api/client";
 
 const Navbar = () => {
   const { currentUser } = useContext(UserContext);
@@ -10,7 +10,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("currentUser");
     try {
-      axios.post("http://localhost:8080/api/v1/users/logout", {
+      client.post("/users/logout", {
         withCredentials: true,
       });
     } catch (error) {

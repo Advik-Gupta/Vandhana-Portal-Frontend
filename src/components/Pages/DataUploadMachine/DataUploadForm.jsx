@@ -3,7 +3,7 @@ import ViewSection from "./ViewSection";
 import { UserContext } from "../../../contexts/user.context";
 
 import { useParams, useLocation } from "react-router-dom";
-import axios from "axios";
+import client from "../../api/client";
 import { processImage, sendToModel } from "./imagePreProcessor";
 
 function DataUploadForm() {
@@ -51,9 +51,7 @@ function DataUploadForm() {
     console.log(cycle, cycleNumber, grindingDate, dataType);
     const fetchMachineName = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/v1/machines/${machineID}`
-        );
+        const response = await client.get(`/machines/${machineID}`);
         setMachineName(response.data.name);
         const site = response.data.testSites.find(
           (site) => site.testSiteNumber === testSiteNumber
@@ -236,20 +234,16 @@ function DataUploadForm() {
       formData.append("uploadedBy", currentUser._id);
       formData.append("grindingDate", grindingDate);
 
-      const res = await axios
-        .post(
-          `http://localhost:8080/api/v1/machines/${machineID}/upload`,
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        )
+      const res = await client
+        .post(`/machines/${machineID}/upload`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
         .then(async (response) => {
           if (response.status === 201) {
             console.log("Data uploaded successfully");
           }
-          const notify = await axios.post(
-            `http://localhost:8080/api/v1/notifications/send?to=admin+supervisor`,
+          const notify = await client.post(
+            `/notifications/send?to=admin+supervisor`,
             {
               message: `Data for ${cycle} cycle ${cycleNumber} of - ${machineName} {${machineID}}, ${testSiteNumber}, ${pointNumber} has been updated by ${
                 currentUser._id

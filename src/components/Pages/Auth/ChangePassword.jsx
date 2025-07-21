@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import client from "../../api/client";
 
 import { UserContext } from "../../../contexts/user.context";
 
@@ -29,8 +29,8 @@ const ChangePassword = () => {
     setError("");
     setLoading(true);
     try {
-      const response = await axios.put(
-        "http://localhost:8080/api/v1/users/profile",
+      const response = await client.put(
+        "/users/profile",
         {
           newPassword: formData.newPassword,
           oldPassword: formData.oldPassword,

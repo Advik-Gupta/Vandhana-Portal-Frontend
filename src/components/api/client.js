@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const backEndUrl = "https://vandhana-portal-backend.onrender.com";
+const backEndUrl =
+  import.meta.env.VITE_BACKEND_URL ||
+  "https://vandhana-portal-backend.onrender.com";
 
 const client = axios.create({
   baseURL: `${backEndUrl}/api/v1`,
