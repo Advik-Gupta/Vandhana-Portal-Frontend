@@ -1,7 +1,11 @@
 import axios from "axios";
 
+const backEndUrl =
+  import.meta.env.VITE_BACKEND_URL ||
+  "https://vandhana-portal-backend.onrender.com";
+
 const client = axios.create({
-  baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/v1`,
+  baseURL: `${backEndUrl}/api/v1`,
   withCredentials: true, // Include cookies in requests
 });
 
