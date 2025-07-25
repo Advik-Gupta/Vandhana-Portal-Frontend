@@ -53,10 +53,13 @@ export async function sendToModel(file) {
   const formData = new FormData();
   formData.append("file", file, file.name);
 
-  const response = await fetch("http://127.0.0.1:8000/process-image", {
-    method: "POST",
-    body: formData,
-  });
+  const response = await fetch(
+    "https://vandhana-image-api.onrender.com/process-image",
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Model processing failed");
